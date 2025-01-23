@@ -2,13 +2,15 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <vector>
+#include <fstream>
 
 
-void print_array(int array[], int count)
+void print_vector(std::vector<int> vector)
 {
-    for (int i = 0 ; i < count; i++)
+    for (int i = 0 ; i < vector.size(); i++)
     {
-        std::cout << array[i] << "\t";
+        std::cout << vector[i] << "\t";
         
     }
     
@@ -19,23 +21,28 @@ void print_array(int array[], int count)
 
 void play_game()
 {
-    int guesses[250];
-    int guess_count = 0;
-
+    std::vector<int> guesses;
+   
+    int count;
     int random = rand() % 251; //Generate a random number from 0 to 250
     std::cout << "Guess the number: ";
+
+    std::cout << random << std::endl;
+
     while(true)
     {
 
+        
         int guess;
         std::cin >> guess;
+        count++;
 
-        guesses[guess_count++] = guess;
+        guesses.push_back(guess);
 
         if (guess == random)
         {
-            std::cout << "Congrats!" << std::endl;
-            std::cout << "Took you " << guess_count << " guesses to find the number" << std::endl;
+            std::cout << "Congrats!" << std::endl;            
+            std::cout << "Took you " << guesses.size() << " guesses to find the number" << std::endl;
             break;
         } else if(guess < random)
         {
@@ -45,7 +52,40 @@ void play_game()
             std::cout << "Too high\n";
         }
     }
-    print_array(guesses, guess_count);
+
+    std::ifstream input("best_score.txt");
+    if(!input.is_open())
+    {
+        std::cout << "Unable to read\n";
+        return;
+    }
+
+    int best_score;
+    input >> best_score;
+
+    std::ofstream output("best_score.txt");
+    if(!output.is_open())
+    {
+        std::cout << "Unable to read\n";
+        return;
+    }
+
+    if(count < best_score)
+    {
+        std::cout << "Congrats you, new high score!\n";
+        output << count;
+        
+    }
+    else
+    {
+        std::cout << "High Score Remains : " << best_score << std::endl;
+        output << best_score;
+        
+    }
+
+
+
+    print_vector(guesses);
 
 }
 
