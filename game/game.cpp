@@ -6,6 +6,43 @@
 #include <fstream>
 
 
+void save_score(int count)
+{
+    std::ifstream input("best_score.txt");
+    if(!input.is_open())
+    {
+        std::cout << "Unable to read\n";
+        return;
+    }
+
+    int best_score;
+    input >> best_score;
+
+    std::ofstream output("best_score.txt");
+    if(!output.is_open())
+    {
+        std::cout << "Unable to read\n";
+        return;
+    }
+
+    if(count < best_score)
+    {
+        std::cout << "Congrats you, new high score!\n";
+        output << count;
+        
+    }
+    else
+    {
+        std::cout << "High Score Remains : " << best_score << std::endl;
+        output << best_score;
+        
+    }
+
+
+
+}
+
+
 void print_vector(std::vector<int> vector)
 {
     for (int i = 0 ; i < vector.size(); i++)
@@ -53,37 +90,7 @@ void play_game()
         }
     }
 
-    std::ifstream input("best_score.txt");
-    if(!input.is_open())
-    {
-        std::cout << "Unable to read\n";
-        return;
-    }
-
-    int best_score;
-    input >> best_score;
-
-    std::ofstream output("best_score.txt");
-    if(!output.is_open())
-    {
-        std::cout << "Unable to read\n";
-        return;
-    }
-
-    if(count < best_score)
-    {
-        std::cout << "Congrats you, new high score!\n";
-        output << count;
-        
-    }
-    else
-    {
-        std::cout << "High Score Remains : " << best_score << std::endl;
-        output << best_score;
-        
-    }
-
-
+    save_score(count);
 
     print_vector(guesses);
 
